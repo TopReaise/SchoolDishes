@@ -16,6 +16,15 @@ urlpatterns = [
     path('mobiles/<phone:mobile>/count', MobileCountView.as_view()),
     # 注册用户
     path('register/', RegisterView.as_view()),
+    # 登录验证 自定义类
+    # path('authorizations/', UserAuthorizeView.as_view()),
+    # # 刷新token
+    # path('refresh/', refresh_jwt_token),
+    # # 用户个人信息
+    # path('info/', UserInfoView.as_view()),
+    # # 修改 密码
+    # path('password/', UpdatePassword.as_view()),
+
 
 ]
 
