@@ -7,4 +7,3 @@ broker_url = "redis://127.0.0.1/15"
 # broker_url= 'amqp://用户名:密码@ip地址:5672'
 
 
-

@@ -47,7 +47,7 @@ class ImageCodeView(View):
     逻辑： 
         验证参数， 图片验证码，生成短信验证码，存入redis 数据库， 发送短信
     路由： 
-        "sms_codes/<mobile>/?image_code=xxxx&image_code_id=xxxx"
+        "sms_codes/<mobile>/"
     响应：
         {'code': 0, 'errmsg': "ok"}
 """
@@ -55,32 +55,8 @@ class ImageCodeView(View):
 
 class MsmCodeView(View):
     def get(self, request, mobile):
-        # 1. 获取参数
-        mobile = mobile
-        image_code = request.GET.get('image_code')
-        uuid = request.GET.get('image_code_id')
-
-        # 2. 验证参数， 是否存在
-        if not all([image_code, uuid]):
-            return JsonResponse({'code': 400, 'errmeg': '参数不全'})
-
-        # 3. 图片验证码
+        # 获取redis 库
         redis_cli = get_redis_connection("image_code")
-        redis_image_code = redis_cli.get(uuid)
-
-        # redis 删除图片
-        try:
-            redis_cli.delete(uuid)
-        except Exception as e:
-            print("删除图片uuid 错误")
-
-        # 3.2 判断是否过有效期
-        if redis_image_code is None:
-            return JsonResponse({"code": 400, "errmsg": "图片验证码过期"})
-
-        # 3.3 用户发过来的对比， redis_image_code 是二进制， 需要decode
-        if redis_image_code.decode().lower() != image_code.lower():
-            return JsonResponse({"code": 400, "errmsg": "图片验证码过期"})
 
         # 4. 生成短信验证码
         # 0-999999
